@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Site List</title>
+    <style>
+        * {box-sizing: border-box;}
+
+        .open-button {
+            position: fixed;
+            bottom: 23px;
+            right: 28px;
+            width: 280px;
+        }
+
+        #form-popup {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            right: 15px;
+            border: 3px solid #f1f1f1;
+            z-index: 9;
+        }
+
+        #form-container {
+            max-width: 300px;
+            padding: 10px;
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="emptyString" class="text-black-50">No Sites Available</h1>
+        {% for site in data %}
+            <div class="row">
+                <div class="col-sm p-2">
+                    <div class="card">
+                        <div class="card-body">
+                        <p class="card-text">{{site[1]}}</p>
+                        </div>
+                        <div class="card-footer">
+                            <button type="button" class="btn btn-success"><a style="text-decoration: none; color: #fff;" href="{{site[2]}}">Visit</a></button>
+                            <button type="btn" class="btn btn-danger"><a style="text-decoration: none; color: #fff;" href="delete/{{site[0]}}">Delete</a></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <button class="open-button btn btn-outline-success" id="open-btn" onclick="openForm()">Add Site</button>
+
+    <div id="form-popup">
+        <form id="form-container", method="POST">
+            <div class="form-group">
+            <label for="formGroupExampleInput">Site Name</label>
+            <input type="text" name="name" class="form-control" id="formGroupExampleInput" placeholder="Site Name" required>
+            </div>
+            <div class="form-group">
+            <label for="formGroupExampleInput2">Link</label>
+            <input type="text" name="link" class="form-control" id="formGroupExampleInput2" placeholder="Link" required>
+            </div>
+            <input type="submit" class="btn btn-outline-primary" name="submitBtn" value="Add">
+            <button type="button" class="btn cancel btn-outline-danger" onclick="closeForm()">Close</button>
+            {% for msg in get_flashed_messages() %}
+                <div class="alert alert-danger" role="alert">
+                    <strong>Oh snap!</strong> {{msg}}
+                </div>
+            {% endfor %}
+        </form>
+    </div>
+
+    <script>
+        window.onload = function() {
+            var rows = document.getElementsByClassName('row');
+            console.log(rows);
+            if (rows.length > 0) {
+                document.getElementById('emptyString').style.display = 'none';
+            } else {
+                document.getElementById('emptyString').style.display = 'block';
+            }
+        }
+
+        function openForm() {
+          document.getElementById("form-popup").style.display = "block";
+          document.getElementById('open-btn').style.display = "none";
+        }
+
+        function closeForm() {
+          document.getElementById("form-popup").style.display = "none";
+          document.getElementById('open-btn').style.display = "block";
+        }
+    </script>
+</body>
+</html>
